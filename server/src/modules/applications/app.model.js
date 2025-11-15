@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 
-const appSchema = new mongoose.Schema(
+const applicationSchema = new mongoose.Schema(
   {
-    userId: mongoose.Schema.Types.ObjectId,
-    company: String,
-    role: String,
-    status: String
+    company: { type: String, required: true },
+    role: { type: String, required: true },
+    status: { type: String, default: "applied" },
+    appliedAt: { type: Date, default: Date.now },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Application", appSchema);
+export default mongoose.model("Application", applicationSchema);
