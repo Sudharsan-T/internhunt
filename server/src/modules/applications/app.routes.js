@@ -1,7 +1,7 @@
-import express from "express";
+import { Router } from "express";
 import { getApplications, createApplication } from "./app.controller.js";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", getApplications);
 router.post("/", createApplication);
