@@ -1,15 +1,9 @@
-import express from "express";
-import Application from "./app.model.js";
+import { Router } from "express";
+import { createApp, getApps } from "./app.controller.js";
 
-const router = express.Router();
+const router = Router();
 
-router.post("/:jobId", async (req, res) => {
-  const { userId } = req.body;
-  const jobId = req.params.jobId;
-
-  const app = await Application.create({ userId, jobId });
-
-  res.json({ msg: "Applied", app });
-});
+router.post("/", createApp);
+router.get("/", getApps);
 
 export default router;
