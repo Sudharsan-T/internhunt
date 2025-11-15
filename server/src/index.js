@@ -13,10 +13,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("InternHunt API is running 🚀");
+});
+
+// API routes
 app.use("/api/applications", appRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 
+// Connect DB
 connectDB();
 
 app.listen(process.env.PORT, () =>

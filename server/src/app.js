@@ -8,6 +8,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Health-check route
+app.get('/', (req, res) => {
+  res.send('✅ InternHunt API — server running');
+});
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/applications", appRoutes);
