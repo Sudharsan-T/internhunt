@@ -22,7 +22,7 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<><Hero /><LogoStrip /><Features /></>} />
-          <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
+          <Route path="/explore" element={<Explore />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>

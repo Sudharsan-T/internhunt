@@ -3,9 +3,9 @@ import API from "../api";
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,13 +30,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signup = async (data) => {
-    const res = await API.post("/auth/register", data);
-    return res.data;
+    return API.post("/auth/register", data);
   };
 
   const login = async (data) => {
     const res = await API.post("/auth/login", data);
-
     const token = res.data.token;
 
     localStorage.setItem("token", token);
@@ -60,4 +58,4 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
+}

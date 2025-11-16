@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import useAuth from "../hooks/useAuth";
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Login() {
-  const { loginUser, loading } = useAuth();
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -13,52 +16,29 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    if (!form.email || !form.password) {
-      return setError("Please fill all fields");
+    try {
+      await login(form);
+
+      // redirect on success
+      navigate("/explore");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
     }
 
-    const res = await loginUser(form);
-    if (!res.ok) setError(res.error || "Login failed");
+    setLoading(false);
   };
 
   return (
-    
     <div className="relative min-h-screen flex items-center justify-center px-6 bg-dark">
 
-      {/* LEFT ambient glow */}
+      {/* PERFECT centered green glow */}
       <div
         className="
-            absolute left-[-300px] top-1/2
-            -translate-y-1/2
-            w-[500px] h-[500px]
-            rounded-full
-            bg-[radial-gradient(circle,rgba(0,200,83,0.10),transparent)]
-            blur-[150px] opacity-40
-            pointer-events-none
-        "
-       />
-
-        {/* RIGHT ambient glow */}
-        <div
-        className="
-            absolute right-[-300px] top-1/2
-            -translate-y-1/2
-            w-[500px] h-[500px]
-            rounded-full
-            bg-[radial-gradient(circle,rgba(0,200,83,0.10),transparent)]
-            blur-[150px] opacity-40
-            pointer-events-none
-        "
-        />
-
-      
-      {/* PERFECT centered green glow behind the card */}
-      <div
-        className="
-          absolute top-1/2 left-1/2 
+          absolute top-1/2 left-1/2
           -translate-x-1/2 -translate-y-1/2
-          w-[620px] h-[620px] 
+          w-[620px] h-[620px]
           rounded-full
           bg-[radial-gradient(circle,rgba(0,200,83,0.22),rgba(0,200,83,0.10),transparent)]
           blur-3xl opacity-60 
@@ -69,27 +49,25 @@ export default function Login() {
       {/* LOGIN BOX */}
       <div className="relative z-10 w-full max-w-md bg-[#0f0f0f]/85 border border-[#1f1f1f] rounded-2xl px-8 py-10 shadow-xl backdrop-blur-md">
         
-        <h1 className="text-3xl font-extrabold text-center mb-2">
-          <span className="text-primary">Login</span> to your account
+        <h1 className="text-3xl font-extrabold text-center mb-4">
+          Login <span className="text-primary">to your account</span>
         </h1>
 
-        {/* ERROR MESSAGE */}
         {error && (
           <div className="mb-4 p-3 text-sm text-red-400 bg-red-900/20 rounded">
             {error}
           </div>
         )}
 
-        {/* FORM */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-
+          
           <input
             type="email"
             name="email"
             placeholder="Email"
-            onChange={handleChange}
             value={form.email}
-            className="w-full px-4 py-3 rounded-md bg-[#1a1a1a] border border-[#333] 
+            onChange={handleChange}
+            className="w-full px-4 py-3 rounded-md bg-[#1a1a1a] border border-[#333]
                        focus:border-primary outline-none"
           />
 
@@ -97,9 +75,9 @@ export default function Login() {
             type="password"
             name="password"
             placeholder="Password"
-            onChange={handleChange}
             value={form.password}
-            className="w-full px-4 py-3 rounded-md bg-[#1a1a1a] border border-[#333] 
+            onChange={handleChange}
+            className="w-full px-4 py-3 rounded-md bg-[#1a1a1a] border border-[#333]
                        focus:border-primary outline-none"
           />
 

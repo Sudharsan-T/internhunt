@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import useAuth from "../hooks/useAuth";
-
+import { useAuth } from "../hooks/useAuth";
 
 export default function Signup() {
-  const { registerUser, loading } = useAuth();
+  const { signup, loading } = useAuth();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
@@ -11,23 +10,23 @@ export default function Signup() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setNotice("");
 
     if (!form.name || !form.email || !form.password) {
-      return setError("Please fill all fields");
+        return setError("Please fill all fields");
     }
 
-    const res = await registerUser(form);
-
-    if (!res.ok) {
-      setError(res.error || "Signup failed");
-    } else {
-      setNotice("Signup successful — you can login now.");
+    try {
+        const res = await signup(form);
+        setNotice("Signup successful — you can now login.");
+    } catch (err) {
+        setError(err.response?.data?.message || "Signup failed");
     }
-  };
+    };
+
 
   return (
     <div className="relative min-h-screen flex items-center justify-center px-6 bg-dark">
