@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// client/src/App.jsx
+import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import ScrollProgress from "./components/ScrollProgress";
@@ -11,47 +12,22 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Explore from "./pages/Explore";
 
-function App() {
+import ProtectedRoute from "./components/ProtectedRoute";
+
+export default function App() {
   return (
-    <Router>
-      <div className="bg-dark min-h-screen text-lightText">
-
-        {/* Top Scroll Progress Bar */}
-        <ScrollProgress />
-
-        {/* Navbar */}
-        <Navbar />
-
-        <main>
-          <Routes>
-
-            {/* Landing Page */}
-            <Route
-              path="/"
-              element={
-                <>
-                  <Hero />
-                  <LogoStrip />
-                  <Features />
-                </>
-              }
-            />
-
-            {/* Explore Page */}
-            <Route path="/explore" element={<Explore />} />
-
-            {/* Auth Pages */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-
-          </Routes>
-        </main>
-
-        {/* Footer */}
-        <Footer />
-      </div>
-    </Router>
+    <div className="bg-dark min-h-screen text-lightText">
+      <ScrollProgress />
+      <Navbar />
+      <main>
+        <Routes>
+          <Route path="/" element={<><Hero /><LogoStrip /><Features /></>} />
+          <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
   );
 }
-
-export default App;

@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Use Bricolage Grotesque globally */
+/* Set default font for entire website */
 * {
   font-family: 'Bricolage Grotesque', sans-serif !important;
 }
 
-/* Theme vars */
+/* Base theme vars */
 :root {
   --bg-dark: #121212;
   --bg-dark-2: #1A1A1A;
@@ -16,7 +16,7 @@
   --light-text: #EAEAEA;
 }
 
-/* Page base */
+/* Prevent white flash before Tailwind loads */
 html, body, #root {
   height: 100%;
   background-color: var(--bg-dark);
@@ -24,6 +24,8 @@ html, body, #root {
 }
 
 /* --- GLOW HELPERS --- */
+
+/* Large soft radial glow used behind hero */
 .hero-radial {
   position: absolute;
   border-radius: 9999px;
@@ -33,12 +35,14 @@ html, body, #root {
   mix-blend-mode: screen;
   opacity: 0.7;
 }
+
 .hero-radial--green {
   width: 520px;
   height: 520px;
   background: radial-gradient(circle at 30% 30%, rgba(0,200,83,0.28), rgba(0,200,83,0.12) 30%, transparent 60%);
   animation: glowPulse 3.5s ease-in-out infinite;
 }
+
 .hero-radial--green-sm {
   width: 320px;
   height: 320px;
@@ -46,7 +50,10 @@ html, body, #root {
   animation: glowPulse 4.2s ease-in-out infinite;
 }
 
-.text-glow { position: relative; }
+/* heading glow underline */
+.text-glow {
+  position: relative;
+}
 .text-glow::after {
   content: "";
   position: absolute;
@@ -62,8 +69,11 @@ html, body, #root {
   opacity: 0.9;
 }
 
-/* Button glow */
-.btn-glow { position: relative; overflow: visible; }
+/* button glow */
+.btn-glow {
+  position: relative;
+  overflow: visible;
+}
 .btn-glow::before {
   content: "";
   position: absolute;
@@ -82,7 +92,20 @@ html, body, #root {
   transform: scale(1.02);
 }
 
+@keyframes glowPulse {
+  0% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.04); }
+  100% { opacity: 0.45; transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+  .hero-radial--green { width: 360px; height: 360px; filter: blur(48px); opacity: 0.55; }
+  .hero-radial--green-sm { width: 220px; height: 220px; filter: blur(36px); opacity: 0.55; }
+}
+
 /* --- STRONG HOVER EFFECTS (C) --- */
+
+/* Card hover motion + glow */
 .card-strong {
   transition: transform 300ms ease, box-shadow 300ms ease, border 250ms ease;
 }
@@ -92,10 +115,10 @@ html, body, #root {
   border: 1px solid rgba(0,230,118,0.5) !important;
 }
 
-/* CTA tuned hover (reduced) */
+/* CTA big button hover */
 .btn-strong:hover {
-  transform: scale(1.03) translateY(-1.5px);
-  box-shadow: 0 14px 34px rgba(0,230,118,0.25);
+  transform: scale(1.06) translateY(-1px);
+  box-shadow: 0 20px 50px rgba(0,230,118,0.35);
 }
 
 /* Navbar underline animation */
@@ -116,10 +139,16 @@ html, body, #root {
   background-color: var(--primary);
   transition: transform 260ms ease;
 }
-.nav-underline:hover::after { transform: translateX(-50%) scaleX(1); }
-.nav-underline:hover { color: var(--primary); }
+.nav-underline:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+.nav-underline:hover {
+  color: var(--primary);
+}
 
 /* === PREMIUM NOISE + LIGHT BEAM BACKGROUND === */
+
+/* Noise overlay */
 .noise {
   position: absolute;
   inset: 0;
@@ -128,6 +157,8 @@ html, body, #root {
   pointer-events: none;
   mix-blend-mode: soft-light;
 }
+
+/* Main light beam */
 .beam {
   position: absolute;
   inset: 0;
@@ -142,6 +173,8 @@ html, body, #root {
   opacity: 0.35;
   pointer-events: none;
 }
+
+/* Subtle diagonal beam */
 .beam-diagonal {
   position: absolute;
   width: 140%;
@@ -161,6 +194,8 @@ html, body, #root {
 }
 
 /* === HYBRID GRADIENT SECTION BACKGROUNDS === */
+
+/* Vertical + diagonal + radial hybrid gradient */
 .section-gradient {
   position: relative;
   background: linear-gradient(
@@ -176,6 +211,8 @@ html, body, #root {
     );
   overflow: hidden;
 }
+
+/* Soft radial glow underneath sections */
 .section-radial {
   position: absolute;
   width: 900px;
@@ -195,6 +232,8 @@ html, body, #root {
   top: 10%;
   transform: translateX(-50%);
 }
+
+/* Noise overlay for sections */
 .section-noise {
   position: absolute;
   inset: 0;
@@ -203,92 +242,4 @@ html, body, #root {
   pointer-events: none;
   mix-blend-mode: soft-light;
   z-index: 1;
-}
-
-/* AOS tweaks for stronger pop-in */
-[data-aos][data-aos][data-aos][data-aos] { } /* no-op to keep tool happy */
-
-/* keyframes (fallback) */
-@keyframes glowPulse {
-  0% { opacity: 0.45; transform: scale(1); }
-  50% { opacity: 0.9; transform: scale(1.04); }
-  100% { opacity: 0.45; transform: scale(1); }
-}
-
-/* responsive adjustments */
-@media (max-width: 768px) {
-  .hero-radial--green { width: 360px; height: 360px; filter: blur(48px); opacity: 0.55; }
-  .hero-radial--green-sm { width: 220px; height: 220px; filter: blur(36px); opacity: 0.55; }
-  .section-radial { width: 560px; height: 560px; left: 50%; top: 5%; }
-}
-
-/* === MICRO-INTERACTIONS & LOGO STRIP STYLES === */
-
-/* Heading shimmer */
-.shimmer {
-  position: relative;
-  overflow: hidden;
-}
-.shimmer::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 100%);
-  transform: translateX(-110%);
-  transition: transform 700ms ease;
-  pointer-events: none;
-}
-.shimmer:hover::before {
-  transform: translateX(10%);
-}
-
-/* Logo strip container tweaks */
-.logo-strip {
-  display: flex;
-  gap: 18px;
-  align-items: center;
-  justify-content: center;
-}
-
-/* progress bar accent (thin gradient) */
-.progress-accent {
-  background: linear-gradient(90deg, rgba(0,200,83,1), rgba(0,230,118,0.9));
-}
-
-/* magnetic button - extra smoothing */
-.btn-glow.will-change-transform {
-  will-change: transform;
-  transition: transform 180ms cubic-bezier(.2,.9,.2,1), box-shadow 180ms ease;
-}
-
-/* subtle pointer follower - optional tiny dot (disabled by default) */
-.pointer-dot {
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: rgba(0,200,83,0.85);
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 60;
-  mix-blend-mode: screen;
-  opacity: 0;
-  transition: opacity 220ms ease;
-}
-
-/* hover states for logo tiles */
-.logo-tile {
-  transition: transform 220ms ease, filter 220ms ease, opacity 220ms ease;
-  filter: grayscale(1) contrast(0.9);
-  opacity: 0.85;
-}
-.logo-tile:hover {
-  transform: translateY(-6px) scale(1.03);
-  filter: none;
-  opacity: 1;
-}
-
-/* small responsive tweaks */
-@media (max-width: 640px) {
-  .logo-tile { padding: 10px 14px; }
 }
