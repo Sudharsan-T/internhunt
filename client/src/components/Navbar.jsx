@@ -23,7 +23,7 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <span className="text-gray-300 text-sm hidden sm:inline">Hi, {user.name}</span>
+            <span className="text-gray-300 text-sm hidden sm:inline">{user.name}</span>
             <button onClick={logout} className="px-3 py-1 bg-[#111] border border-[#2a2a2a] rounded-md text-gray-300">Logout</button>
           </>
         )}

@@ -8,6 +8,21 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
+  // Normalize any backend user response so UI always has name + email
+  const normalizeUser = (apiUser = {}) => {
+    return {
+      id: apiUser.id || apiUser._id || null,
+      name:
+        apiUser.name ||
+        apiUser.fullName ||
+        apiUser.username ||
+        (apiUser.email ? apiUser.email.split("@")[0] : null) ||
+        "User",
+      email: apiUser.email || null,
+      ...apiUser,
+    };
+  };
+
   useEffect(() => {
     if (token) {
       API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -20,7 +35,8 @@ export function AuthProvider({ children }) {
   const fetchUser = async () => {
     try {
       const res = await API.get("/protected");
-      setUser(res.data.user);
+      const normalized = normalizeUser(res.data.user);
+      setUser(normalized);
     } catch (err) {
       console.error("Failed fetching user:", err);
       setUser(null);
@@ -30,18 +46,24 @@ export function AuthProvider({ children }) {
   };
 
   const signup = async (data) => {
-    return API.post("/auth/register", data);
+    const res = await API.post("/auth/register", data);
+    return res.data;
   };
 
   const login = async (data) => {
     const res = await API.post("/auth/login", data);
-    const token = res.data.token;
 
+    const token = res.data.token;
+    const apiUser = res.data.user;
+
+    // Save token
     localStorage.setItem("token", token);
     setToken(token);
-
     API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    setUser(res.data.user);
+
+    // Normalize + save user
+    const normalized = normalizeUser(apiUser);
+    setUser(normalized);
 
     return res.data;
   };
@@ -54,7 +76,17 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, signup, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        loading,
+        signup,
+        login,
+        logout,
+        isAuthenticated: !!user,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
