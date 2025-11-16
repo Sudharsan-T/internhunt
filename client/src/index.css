@@ -1,3 +1,104 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Set default font for entire website */
+* {
+  font-family: 'Bricolage Grotesque', sans-serif !important;
+}
+
+/* Base theme vars */
+:root {
+  --bg-dark: #121212;
+  --bg-dark-2: #1A1A1A;
+  --primary: #00C853;
+  --primary-light: #00E676;
+  --light-text: #EAEAEA;
+}
+
+/* Prevent white flash before Tailwind loads */
+html, body, #root {
+  height: 100%;
+  background-color: var(--bg-dark);
+  color: var(--light-text);
+}
+
+/* --- GLOW HELPERS --- */
+
+/* Large soft radial glow used behind hero */
+.hero-radial {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(64px);
+  transform-origin: center;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+}
+
+.hero-radial--green {
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle at 30% 30%, rgba(0,200,83,0.28), rgba(0,200,83,0.12) 30%, transparent 60%);
+  animation: glowPulse 3.5s ease-in-out infinite;
+}
+
+.hero-radial--green-sm {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle at 40% 40%, rgba(0,230,118,0.18), rgba(0,200,83,0.08) 35%, transparent 60%);
+  animation: glowPulse 4.2s ease-in-out infinite;
+}
+
+/* heading glow underline */
+.text-glow {
+  position: relative;
+}
+.text-glow::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -6px;
+  width: 60%;
+  height: 18px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(0,200,83,0.12), rgba(0,230,118,0.08));
+  filter: blur(12px);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* button glow */
+.btn-glow {
+  position: relative;
+  overflow: visible;
+}
+.btn-glow::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  z-index: -1;
+  border-radius: 12px;
+  background: radial-gradient(closest-side, rgba(0,200,83,0.12), transparent 40%);
+  filter: blur(18px);
+  opacity: 0;
+  transition: opacity 280ms ease, transform 280ms ease;
+  transform: scale(0.98);
+}
+.btn-glow:hover::before,
+.btn-glow:focus::before {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+@keyframes glowPulse {
+  0% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.04); }
+  100% { opacity: 0.45; transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+  .hero-radial--green { width: 360px; height: 360px; filter: blur(48px); opacity: 0.55; }
+  .hero-radial--green-sm { width: 220px; height: 220px; filter: blur(36px); opacity: 0.55; }
+}
